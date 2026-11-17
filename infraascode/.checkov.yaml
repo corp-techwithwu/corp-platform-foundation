@@ -1,0 +1,4 @@
+# .checkov.yaml
+skip-check:
+  - CKV_TF_1 # Allow Terraform Registry modules with version constraints and lockfile
+  - CKV_TF_2 # Allow Terraform module sources use a tag without a version number

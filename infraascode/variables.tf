@@ -31,7 +31,7 @@ variable "enable_telemetry" {
   default     = false
 }
 
-variable corp_platform_root_group_name {
+variable "corp_platform_root_group_name" {
   type        = string
   description = "The Root subscription of the management group"
 }

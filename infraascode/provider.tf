@@ -33,7 +33,7 @@ provider "alz" {
   # This mapping makes messages read naturally.
   non_compliance_message_substitution_settings = {
     enforcement_mode = {
-      default  = "Audit"
+      default = "Audit"
       override = {
         "Deny"     = "is"
         "Audit"    = "is not"

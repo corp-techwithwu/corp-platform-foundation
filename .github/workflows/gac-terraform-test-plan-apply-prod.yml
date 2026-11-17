@@ -38,6 +38,9 @@ jobs:
 
       - name: 'Setup Terraform CLI'
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.17.1
+          terraform_wrapper: false
 
       - name: 'Azure CLI Login (OIDC Passwordless)'
         uses: azure/login@v2
@@ -79,36 +82,32 @@ jobs:
           terraform plan -var-file="env/${{ env.TF_ENV }}/terraform.tfvars" -no-color -out=tfplan > plan.out
           cat plan.out
 
+      - name: 'Format Plan Summary'
+        run: |
+          {
+            echo "### 🚀 Terraform Plan Output"
+            echo "> **Branch**: \`${{ github.ref_name }}\` | **Commit**: \`${{ github.sha }}\`"
+            echo ""
+            echo "<details><summary>Click to view complete plan</summary>"
+            echo ""
+            echo '```hcl'
+            # Truncate plan to 50,000 characters to stay safely within GitHub comment limits
+            head -c 50000 plan.out
+            echo ""
+            echo '```'
+            echo "</details>"
+          } > comment.md
+
       - name: 'Publish Plan to Task Summary'
         run: |
-          echo "### 🚀 GitHub-as-Code Terraform Plan Output" >> $GITHUB_STEP_SUMMARY
-          echo "> **Branch**: \`${{ github.ref_name }}\` | **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "<details><summary>Click to view complete plan</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo '```hcl' >> $GITHUB_STEP_SUMMARY
-          cat plan.out >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "</details>" >> $GITHUB_STEP_SUMMARY
+          cat comment.md >> $GITHUB_STEP_SUMMARY
 
-      - name: 'Push Plan Summary Notice to Pull Request'
+      - name: 'Push Plan Output to Pull Request'
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const body = `### 🚀 GitHub-as-Code Terraform Plan Output
-
-> **Branch**: \`${context.payload.pull_request.head.ref}\` | **Commit**: \`${context.sha}\`
-
-Terraform plan completed successfully! Please check the **GitHub Actions Job Summary** and workflow artifacts in this PR for the complete plan details.`;
-
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} -F comment.md
 
       - name: 'Archive Terraform Plan Artifact'
         uses: actions/upload-artifact@v4
@@ -135,6 +134,9 @@ Terraform plan completed successfully! Please check the **GitHub Actions Job Sum
 
       - name: 'Setup Terraform CLI'
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.17.1
+          terraform_wrapper: false
 
       - name: 'Azure CLI Login (OIDC Passwordless)'
         uses: azure/login@v2

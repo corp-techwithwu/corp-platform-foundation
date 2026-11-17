@@ -5,6 +5,10 @@
 terraform {
   required_version = "~> 1.17"
 
+  backend "azurerm" {
+    use_oidc = true
+  }
+
   required_providers {
     alz = {
       source  = "Azure/alz"

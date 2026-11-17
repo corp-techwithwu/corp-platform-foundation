@@ -1,4 +1,4 @@
 resource_group_name  = "rg-tfstate-prod"
-storage_account_name = "stcorpplatformfoundationprod"
-container_name       = "corpplatformfoundationprod"
-key                  = "corpplatformfoundation.tfstate"
+storage_account_name = "platformfoundationprod"
+container_name       = "platformfoundationprod"
+key                  = "platformfoundationprod.tfstate"

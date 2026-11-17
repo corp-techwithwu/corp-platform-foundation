@@ -19,12 +19,6 @@ DESC
   default     = "centralus"
 }
 
-variable "platform_subscription_id" {
-  description = "Subscription ID that will be placed under the Platform management group."
-  type        = string
-  default     = "00000000-0000-0000-0000-000000000000"
-}
-
 variable "enable_telemetry" {
   description = "Enable Azure Verified Module (AVM) telemetry via modtm."
   type        = bool

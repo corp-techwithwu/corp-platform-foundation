@@ -7,7 +7,6 @@ locals {
   organization = "corp-platform"
 
   intermediate_root_mg_name = "mg-${local.organization}-${var.environment}-root"
-  platform_mg_name          = "mg-${local.organization}-${var.environment}-platform"
 
   # The ALZ provider expects `parent_resource_id` to be the management
   # group NAME only.

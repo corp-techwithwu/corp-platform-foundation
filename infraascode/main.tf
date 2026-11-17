@@ -49,47 +49,6 @@ resource "azapi_resource" "intermediate_root_mg" {
 }
 
 ###############################################################################
-# Platform Management Group
-# Child of the Intermediate Root management group.
-###############################################################################
-
-resource "azapi_resource" "platform_mg" {
-  type      = "Microsoft.Management/managementGroups@2023-04-01"
-  parent_id = "/"
-  name      = local.platform_mg_name
-
-  body = {
-    properties = {
-      details = {
-        parent = {
-          id = azapi_resource.intermediate_root_mg.id
-        }
-      }
-      displayName = "${upper(local.organization)} ${upper(var.environment)} Platform"
-    }
-  }
-
-  response_export_values = []
-  retry = {
-    error_message_regex = [
-      "AuthorizationFailed", # Avoids a eventual consistency issue where a recently created management group is not yet available for a GET operation.
-      "Permission to Microsoft.Management/managementGroups on resources of type 'Write' is required on the management group or its ancestors."
-    ]
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  timeouts {
-    create = "30m"
-    read   = "30m"
-    delete = "5m"
-    update = "5m"
-  }
-}
-
-###############################################################################
 # ALZ Architecture
 # AVM Pattern: Azure/avm-ptn-alz/azurerm
 #
@@ -124,17 +83,8 @@ module "alz_architecture" {
   # Ensure the intermediate root MG, Platform MG, and hierarchy settings
   # exist before the ALZ provider reads the hierarchy.
   management_groups_dependencies = [
-    azapi_resource.intermediate_root_mg.id,
-    azapi_resource.platform_mg.id
+    azapi_resource.intermediate_root_mg.id
   ]
-
-  # Explicit subscription placement
-  subscription_placement = {
-    platform = {
-      subscription_id       = var.platform_subscription_id
-      management_group_name = local.platform_mg_name
-    }
-  }
 
   subscription_placement_destroy_behavior = var.subscription_placement_destroy_behavior
 

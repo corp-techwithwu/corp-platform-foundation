@@ -17,16 +17,6 @@ output "intermediate_root_management_group_name" {
   value       = azapi_resource.intermediate_root_mg.name
 }
 
-output "platform_management_group_id" {
-  description = "Resource ID of the Platform management group."
-  value       = azapi_resource.platform_mg.id
-}
-
-output "platform_management_group_name" {
-  description = "Name of the Platform management group."
-  value       = azapi_resource.platform_mg.name
-}
-
 output "alz_architecture_outputs" {
   description = "Outputs from the avm-ptn-alz module (policy assignment and role definition mappings)."
   value       = module.alz_architecture

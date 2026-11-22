@@ -97,19 +97,34 @@ module "alz_architecture" {
 
   policy_assignments_to_modify = {
     # Azure Landing Zones
-    alz = {
+    landingzones = {
       policy_assignments = {
         Enable-DDoS-VNET = {
           parameters = {
             effect = jsonencode({ value = "Disabled" })
           }
         }
-        # Optional: include this if Deploy-DDoSProtection is also assigned on connectivity
-        # Deploy-DDoSProtection = {
-        #   parameters = {
-        #     effect = jsonencode({ value = "Disabled" })
-        #   }
-        # }
+        #Optional: include this if Deploy-DDoSProtection is also assigned
+        Deploy-DDoSProtection = {
+          parameters = {
+            effect = jsonencode({ value = "Disabled" })
+          }
+        }
+      }
+    }
+    connectivity = {
+      policy_assignments = {
+        Enable-DDoS-VNET = {
+          parameters = {
+            effect = jsonencode({ value = "Disabled" })
+          }
+        }
+        #Optional: include this if Deploy-DDoSProtection is also assigned
+        Deploy-DDoSProtection = {
+          parameters = {
+            effect = jsonencode({ value = "Disabled" })
+          }
+        }
       }
     }
   }

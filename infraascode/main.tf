@@ -104,23 +104,11 @@ module "alz_architecture" {
             effect = jsonencode({ value = "Disabled" })
           }
         }
-        #Optional: include this if Deploy-DDoSProtection is also assigned
-        Deploy-DDoSProtection = {
-          parameters = {
-            effect = jsonencode({ value = "Disabled" })
-          }
-        }
       }
     }
     connectivity = {
       policy_assignments = {
         Enable-DDoS-VNET = {
-          parameters = {
-            effect = jsonencode({ value = "Disabled" })
-          }
-        }
-        #Optional: include this if Deploy-DDoSProtection is also assigned
-        Deploy-DDoSProtection = {
           parameters = {
             effect = jsonencode({ value = "Disabled" })
           }

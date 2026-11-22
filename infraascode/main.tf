@@ -94,4 +94,26 @@ module "alz_architecture" {
     default_message = "This resource {enforcementMode} be compliant with the assigned policy."
     merge_mode      = "replace"
   }
+
+  policy_assignments_to_modify = {
+    # Azure Landing Zones
+    landingzones = {
+      policy_assignments = {
+        Enable-DDoS-VNET = {
+          parameters = {
+            effect = jsonencode({ value = "Disabled" })
+          }
+        }
+      }
+    }
+    connectivity = {
+      policy_assignments = {
+        Enable-DDoS-VNET = {
+          parameters = {
+            effect = jsonencode({ value = "Disabled" })
+          }
+        }
+      }
+    }
+  }
 }
